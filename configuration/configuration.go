@@ -8,7 +8,7 @@ import (
 
 type BrushType = int
 
-type PixelCanvasConfiguration struct {
+type CanvasConfiguration struct {
 	DrawingArea             fyne.Size
 	CanvasOffSet            fyne.Position
 	PixelRows, PixelColumns int

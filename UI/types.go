@@ -1,6 +1,7 @@
 package UI
 
 import (
+	"pixel/canvas"
 	"pixel/configuration"
 	"pixel/swatch"
 
@@ -9,6 +10,7 @@ import (
 
 type Initialisation struct {
 	Window   fyne.Window
+	Canvas   *canvas.Canvas
 	State    *configuration.State
 	Swatches []*swatch.Swatch
 }
