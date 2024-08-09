@@ -92,3 +92,31 @@ func (canvas *Canvas) TryPan(previousCoOrdinate *fyne.PointEvent, event *desktop
 		canvas.Pan(*previousCoOrdinate, event.PointEvent)
 	}
 }
+
+func (canvas *Canvas) SetColour(colour color.Color, x, y int) {
+	if NRGBA, OK := canvas.PixelData.(*image.NRGBA); OK {
+		NRGBA.Set(x, y, colour)
+	}
+
+	if RGBA, OK := canvas.PixelData.(*image.RGBA); OK {
+		RGBA.Set(x, y, colour)
+	}
+
+	canvas.Refresh()
+}
+
+func (canvas *Canvas) MouseToCanvasXY(event *desktop.MouseEvent) (*int, *int) {
+	bounds := canvas.Bounds()
+
+	if !InBounds(event.Position, bounds) {
+		return nil, nil
+	}
+
+	pixelSize := float32(canvas.PixelSize)
+	offSetX := canvas.CanvasOffSet.X
+	offSetY := canvas.CanvasOffSet.Y
+	x := int((event.Position.X - offSetX) / pixelSize)
+	y := int((event.Position.Y - offSetY) / pixelSize)
+
+	return &x, &y
+}
