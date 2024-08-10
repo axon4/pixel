@@ -2,6 +2,7 @@ package UI
 
 import (
 	"errors"
+	"image"
 	"image/png"
 	"os"
 	"strconv"
@@ -112,8 +113,40 @@ func BuildSaveAsMenu(application *Initialisation) *fyne.MenuItem {
 	})
 }
 
+func BuildOpenMenu(application *Initialisation) *fyne.MenuItem {
+	return fyne.NewMenuItem("Open", func() {
+		dialog.ShowFileOpen(func(URI fyne.URIReadCloser, err error) {
+			if URI == nil {
+				return
+			} else {
+				image, _, err := image.Decode(URI)
+
+				if err != nil {
+					dialog.ShowError(err, application.Window)
+
+					return
+				}
+
+				application.Canvas.LoadImage(image)
+				application.State.SetFilePath(URI.URI().Path())
+				imageColours := GetImageColours(image)
+				var i int
+
+				for c := range imageColours {
+					if i == len(application.Swatches) {
+						break
+					}
+
+					application.Swatches[i].SetColour(c)
+					i++
+				}
+			}
+		}, application.Window)
+	})
+}
+
 func BuildMenus(application *Initialisation) *fyne.Menu {
-	return fyne.NewMenu("File", BuildNewMenu(application), BuildSaveMenu(application), BuildSaveAsMenu(application))
+	return fyne.NewMenu("File", BuildNewMenu(application), BuildSaveMenu(application), BuildSaveAsMenu(application), BuildOpenMenu(application))
 }
 
 func SetUpMenus(application *Initialisation) {
