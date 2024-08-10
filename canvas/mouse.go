@@ -17,6 +17,10 @@ func (canvas *Canvas) MouseIn(event *desktop.MouseEvent) {}
 func (canvas *Canvas) MouseMoved(event *desktop.MouseEvent) {
 	if x, y := canvas.MouseToCanvasXY(event); x != nil && y != nil {
 		brush.TryBrush(canvas.applicationState, canvas, event)
+		cursor := brush.Cursor(canvas.CanvasConfiguration, canvas.applicationState.BrushType, event, *x, *y)
+		canvas.renderer.SetCursor(cursor)
+	} else {
+		canvas.renderer.SetCursor(make([]fyne.CanvasObject, 0))
 	}
 
 	canvas.TryPan(canvas.mouseState.previousCoOrdinate, event)

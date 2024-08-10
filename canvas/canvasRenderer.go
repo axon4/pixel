@@ -12,6 +12,10 @@ type CanvasRenderer struct {
 	canvasCursor []fyne.CanvasObject
 }
 
+func (renderer *CanvasRenderer) SetCursor(objects []fyne.CanvasObject) {
+	renderer.canvasCursor = objects
+}
+
 func (renderer *CanvasRenderer) MinSize() fyne.Size {
 	return renderer.canvas.DrawingArea
 }
